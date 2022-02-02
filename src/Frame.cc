@@ -190,6 +190,77 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     // ORB extraction
     ExtractORB(0,imGray);
 
+    // INPUT SAVED Keypoints and Descriptors
+        ifstream f;
+        /*
+        f.open("saved_keypoints/"+std::to_string(timeStamp)+".txt");
+        mvKeys.clear();
+        mvKeys.resize(2); // MAKE THIS NUMBER OF LINES IN FILE (# KEYPOINTS)
+        int i = 0;
+        int j = 0;
+        while(j<2) //!f.eof()
+        {
+            string line;
+            getline(f,line);
+            stringstream ss(line);
+            string s;
+            while (getline(ss,s,' ')){
+                if(!s.empty())
+                {
+                    stringstream convert;
+                    convert << s;
+                    double a;
+                    convert >> a;
+                    if(i==0) mvKeys[j].angle = a;
+                    if(i==1) mvKeys[j].class_id = a;
+                    if(i==2) mvKeys[j].octave = a;
+                    if(i==3) mvKeys[j].pt.x = a;
+                    if(i==4) mvKeys[j].pt.y = a;
+                    if(i==5) mvKeys[j].response = a;
+                    if(i==6) mvKeys[j].size = a;
+                }
+                i++;
+            }
+            j++;
+            i=0;
+        }
+        //std::cout << "keypoints: " << mvKeys[7000].pt.x;
+        //std::cout << "size: " << j;
+        //std::cout << "kp size: " << (int)mvKeys.size();
+        f.close();
+
+
+        f.open("saved_descriptors/"+std::to_string(timeStamp)+".txt");
+        mDescriptors = cv::Mat::zeros((int)2, 32, CV_8UC1); //(int)keypoints.size()
+        int i = 0;
+        int j = 0;
+        while(j<2) //mvKeys.size()
+        {
+            string line;
+            getline(f,line);
+            stringstream ss(line);
+            string s;
+            while (getline(ss,s,',')){
+                if(!s.empty())
+                {
+                    stringstream convert;
+                    convert << s;
+                    double a;
+                    convert >> a;
+                    mDescriptors.at<uchar>(j,i)=a;
+                }
+                i++;
+                if(i==32){
+                    j++;
+                    i = 0;
+                }
+            }
+        }
+        //std::cout << "descriptor: " << mDescriptors;
+        f.close();
+        */
+        // END INPUTTING
+
     N = mvKeys.size();
 
     if(mvKeys.empty())
@@ -225,6 +296,27 @@ Frame::Frame(const cv::Mat &imGray, const double &timeStamp, ORBextractor* extra
     mb = mbf/fx;
 
     AssignFeaturesToGrid();
+
+    // Save Keypoints, Descriptors and Frames for processing in Python
+    /*
+    ofstream myfile;
+    myfile.open("/home/olivia/SLAM/data/TUM-VIE/mocap-1d-trans-vi_gt_data/Keypoints_Descriptors/keypoints/"+std::to_string(timeStamp)+".txt");
+    for(int i =0; i < mvKeys.size();i++){
+            myfile << mvKeys[i].angle <<' ';
+            myfile << mvKeys[i].class_id << ' ';
+            myfile << mvKeys[i].octave <<' ';
+            myfile << mvKeys[i].pt.x << ' ';
+            myfile << mvKeys[i].pt.y <<' ';
+            myfile << mvKeys[i].response <<' ';
+            myfile << mvKeys[i].size << endl;
+    }
+    myfile.close();
+    cv::imwrite("/home/olivia/SLAM/data/TUM-VIE/mocap-1d-trans-vi_gt_data/Keypoints_Descriptors/frames/"+std::to_string(timeStamp)+".png", imGray);
+    myfile.open("/home/olivia/SLAM/data/TUM-VIE/mocap-1d-trans-vi_gt_data/Keypoints_Descriptors/descriptors/"+std::to_string(timeStamp)+".txt");
+    myfile << cv::format(mDescriptors,cv::Formatter::FMT_CSV) << endl;
+    myfile.close();
+    */
+    // END
 }
 
 void Frame::AssignFeaturesToGrid()
